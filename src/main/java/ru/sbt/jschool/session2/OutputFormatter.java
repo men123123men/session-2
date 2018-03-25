@@ -96,9 +96,10 @@ public class OutputFormatter {
     private Function<Object,String> get_ObjectToString_Function(Class clazz){
         switch (clazz.getSimpleName()){
             case "Integer": return o-> o==null ? "-" :String.format("%,d",o).replace(',',' ');
-            case "Double":  return o-> o==null ? "-" :String.format("%,.2f",o).replace(',',' ').replace('.',',');
+            case "Double":  return o-> o==null ? "-" :
+                String.format("%,.2f",Double.valueOf(o.toString())-.0001).replace(',',' ').replace('.',',');
             case "String":  return o-> o==null ? "-" :String.format("%s",o);
-            case "Date":    return o-> o==null ? "-" :String.format("%tm.%<td.%<ty",o);
+            case "Date":    return o-> o==null ? "-" :String.format("%td.%<tm.00%<ty",o);
             default: return Object::toString;
         }
     }
@@ -130,9 +131,9 @@ public class OutputFormatter {
 
 
     public static void main(String[] args) throws Exception {
-//        OutputFormatter formatter = new OutputFormatter(System.out);
-//        for(int i = 0;i<5;i++)
-//            test(formatter,i);
+        OutputFormatter formatter = new OutputFormatter(System.out);
+        for(int i = 0;i<2;i++)
+            test(formatter,i);
 
 
 //        System.out.printf("%,.2f",.365); // выводит "0,37", а в тестовом файле "0,36"

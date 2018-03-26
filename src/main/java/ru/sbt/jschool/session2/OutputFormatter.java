@@ -20,15 +20,18 @@ package ru.sbt.jschool.session2;
 
 import java.io.FileInputStream;
 import java.io.PrintStream;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.function.Function;
 
 /**
  */
 public class OutputFormatter {
+	{Locale.setDefault(Locale.FRANCE);}
     private PrintStream out;
     public OutputFormatter(PrintStream out) {
         this.out = out;
@@ -66,8 +69,6 @@ public class OutputFormatter {
             }
             currentLineFormater = makeLineFormater(elementLettersCount, classes);
         }
-
-
         String linesSeparator = makeLineSeparator(elementLettersCount, "-", "+");
         String header = makeHeader(names, elementLettersCount);
 
@@ -77,9 +78,6 @@ public class OutputFormatter {
             out.printf(currentLineFormater, dataStr[i]);
             out.println(linesSeparator);
         }
-
-
-
     }
 
     private String makeHeader(String[] names, int[] elementLettersCount) {
@@ -93,11 +91,16 @@ public class OutputFormatter {
         return result.toString();
     }
 
+    private DecimalFormat forDouble = new DecimalFormat("###,##0.00");
+    private DecimalFormat forInteger = new DecimalFormat("###,##0");
+    		
+    		;
     private Function<Object,String> get_ObjectToString_Function(Class clazz){
         switch (clazz.getSimpleName()){
-            case "Integer": return o-> o==null ? "-" :String.format("%,d",o).replace(',',' ');
-            case "Double":  return o-> o==null ? "-" :
-                String.format("%,.2f",Double.valueOf(o.toString())-.0001).replace(',',' ').replace('.',',');
+            case "Integer": return o-> o==null ? "-" : forInteger.format(o);
+//            	String.format("%,d",o).replace(',',' ');
+            case "Double":  return o-> o==null ? "-" :forDouble.format(o);
+//            	String.format("%,.2f",Double.valueOf(o.toString())).replace(',',' ').replace('.',',');
             case "String":  return o-> o==null ? "-" :String.format("%s",o);
             case "Date":    return o-> o==null ? "-" :String.format("%td.%<tm.00%<ty",o);
             default: return Object::toString;
@@ -131,13 +134,9 @@ public class OutputFormatter {
 
 
     public static void main(String[] args) throws Exception {
-        OutputFormatter formatter = new OutputFormatter(System.out);
-        for(int i = 0;i<2;i++)
-            test(formatter,i);
-
-
-//        System.out.printf("%,.2f",.365); // выводит "0,37", а в тестовом файле "0,36"
-
+//        OutputFormatter formatter = new OutputFormatter(System.out);
+//        for(int i = 0;i<3;i++)
+//            test(formatter,i);
     }
     private static Object format(String str, String type) throws ParseException {
         if ("".equals(str))
@@ -158,7 +157,7 @@ public class OutputFormatter {
     }
     private static void test(OutputFormatter exeplair, int fileNumber) throws Exception {
 
-        String pathStr = "/Users/admin/Downloads/20September/session-2/src/test/resources/"+fileNumber+"/input.csv";
+        String pathStr = "/Users/admin/eclipse-workspace/session-2/src/test/resources/"+fileNumber+"/input.csv";
         System.out.println(pathStr);
 
         Scanner sc = new Scanner(new FileInputStream(pathStr));

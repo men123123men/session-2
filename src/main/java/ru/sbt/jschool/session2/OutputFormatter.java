@@ -61,7 +61,7 @@ public class OutputFormatter {
             String currentStr;
 
             for (int i = 0; i < width; i++) {      // итерируемся по столбцам (Object[j][i])
-                current_ObjectToString_Function = getObjectToStringFunction(classes[i]);
+                currentObjectToStringFunction = getObjectToStringFunction(classes[i]);
                 for (int j = 0; j < height; j++) {  // итерируемся по значениям в столбце
                     currentStr = currentObjectToStringFunction.apply(data[j][i]);
                     if (currentStr.length() > elementLettersCount[i])

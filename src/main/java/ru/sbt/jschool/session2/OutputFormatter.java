@@ -28,21 +28,6 @@ import java.util.Locale;
 import java.util.Scanner;
 import java.util.function.Function;
 
-/**
- * 2. Модифицировать программу для возможности добавления новых выводимых типов данных
- Выделить интерфейс, который отвечает за конкретный тип данных.
- Какие у него должны быть методы?
-
- * Добавить поддержку типа данных TIMESTAMP. Вывод даты в формате dd.MM.yyyy HH:mm.SS.sss
- * Добавить поддержку типа данных CUT_STR. Вывод строки фиксированной длины. Для более длиных строк в конце добавляется ...
- Пример. Максимальная длина - 15
- Hello, World!    - строка "Hello, World!" влезает
- Hello, beatif... - строка "Hello, beatifull World!" не влезает
- 1234556789012345 - строка из ровано 15 символов влезает
- *
- *
- *
- */
 public class OutputFormatter {
 
 	{Locale.setDefault(Locale.FRANCE);}
@@ -72,13 +57,13 @@ public class OutputFormatter {
                     .map(Object::getClass)
                     .toArray(Class[]::new);
 
-            Function<Object, String> current_ObjectToString_Function;
+            Function<Object, String> currentObjectToStringFunction;
             String currentStr;
 
             for (int i = 0; i < width; i++) {      // итерируемся по столбцам (Object[j][i])
-                current_ObjectToString_Function = getObjectToStringFunction(classes[i]);
+                currentObjectToStringFunction = getObjectToStringFunction(classes[i]);
                 for (int j = 0; j < height; j++) {  // итерируемся по значениям в столбце
-                    currentStr = current_ObjectToString_Function.apply(data[j][i]);
+                    currentStr = currentObjectToStringFunction.apply(data[j][i]);
                     if (currentStr.length() > elementLettersCount[i])
                         elementLettersCount[i] = currentStr.length();
                     dataStr[j][i] = currentStr;

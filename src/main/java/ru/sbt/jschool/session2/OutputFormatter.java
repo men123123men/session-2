@@ -57,13 +57,13 @@ public class OutputFormatter {
                     .map(Object::getClass)
                     .toArray(Class[]::new);
 
-            Function<Object, String> current_ObjectToString_Function;
+            Function<Object, String> currentObjectToStringFunction;
             String currentStr;
 
             for (int i = 0; i < width; i++) {      // итерируемся по столбцам (Object[j][i])
                 current_ObjectToString_Function = getObjectToStringFunction(classes[i]);
                 for (int j = 0; j < height; j++) {  // итерируемся по значениям в столбце
-                    currentStr = current_ObjectToString_Function.apply(data[j][i]);
+                    currentStr = currentObjectToStringFunction.apply(data[j][i]);
                     if (currentStr.length() > elementLettersCount[i])
                         elementLettersCount[i] = currentStr.length();
                     dataStr[j][i] = currentStr;

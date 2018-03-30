@@ -21,9 +21,11 @@ public class TypeFormater<T>{
     public Function<T, String> getFunction() {
         return function;
     }
+
     public String getDefaultValue() {
         return defaultValue;
     }
+
     public Shift getShift() {
         return shift;
     }

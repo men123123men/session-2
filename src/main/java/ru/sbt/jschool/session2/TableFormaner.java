@@ -1,15 +1,14 @@
 package ru.sbt.jschool.session2;
 
-
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class TableFormaner {
+public class TableFormaner<T> {
     private String[] names;
     private Object[][] data;
-    private Map<Class, TypeFormater> typeFormateres;
+    private Map<Class<T>, TypeFormater<T>> typeFormateres;
 
-    public TableFormaner(TableData tableData, Map<Class, TypeFormater> typeFormateres) {
+    public TableFormaner(TableData tableData, Map<Class<T>, TypeFormater<T>> typeFormateres) {
         names = tableData.getNames();
         data = tableData.getData();
         this.typeFormateres = typeFormateres;
@@ -23,10 +22,9 @@ public class TableFormaner {
         String element;
 
         if (data.length>0){
-            TypeFormater<Object> typeFormater = typeFormateres.get(data[0][index].getClass());
-//            Function<Object,String> function = typeFormater.getFunction();
+            TypeFormater<T> typeFormater = typeFormateres.get(data[0][index].getClass());
             for(int i=0;i<data.length;i++){
-                element = typeFormater.format(data[i][index]);
+                element = typeFormater.format((T)data[i][index]);
                 result[i+2] = element;
                 if (element.length()>columnWidth)
                     columnWidth = element.length();
@@ -58,8 +56,7 @@ public class TableFormaner {
     private String[][] getFormatedTableElements(){
         if(data.length==0){
             String[] lineSeparatorParts = Stream.of(names).map(s->s.replaceAll(".","-")).toArray(String[]::new);
-            String[][] strings = {lineSeparatorParts,names};
-            return strings;
+            return new String[][]{lineSeparatorParts,names};
         }
 
         String[][] transposeResult = new String[data[0].length][];
@@ -81,7 +78,6 @@ public class TableFormaner {
         lineSeparator.append("\n");
         result.append(lineSeparator);
 
-
         for (int i = 1;i<input.length;i++){
             result.append("|");
             for(int j=0;j<input[i].length;j++) {
@@ -95,35 +91,11 @@ public class TableFormaner {
     }
 
     // how to make it parametread?
-    private static String[][] transpose2DArray(String[][] input){
+    public static String[][] transpose2DArray(String[][] input){
         String[][] result = new String[input[0].length][input.length];
         for(int i=0;i<input.length;i++)
             for(int j=0;j<input[i].length;j++)
                 result[j][i] = input[i][j];
         return result;
-    }
-
-
-
-
-    public static void main(String[] args) {
-
-//        String[][] strings = {{"1","2","3"},{"4","5","6"},{"7","8","9"}};
-
-        String[] innerStrings = {"1","2","3"};
-        String[][] strings = {innerStrings};
-//        String[][] transposeStrings = transpose2DArray(strings);
-//
-//        arrayPrinter2D(strings);
-//        arrayPrinter2D(transposeStrings);
-
-    }
-    public static void arrayPrinter2D(String[][] strings){
-        for (String[] strs: strings) {
-            for(String str:strs)
-                System.out.print(str+" ");
-            System.out.println();
-        }
-        System.out.println();
     }
 }
